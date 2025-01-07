@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\title{Supervised Learning Framework}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\textbf{Supervised learning} is the type of machine learning in which a dataset organized into pairs is provided. $D_n = \{(x^{(1)}, y^{(1)}), ... , (x^{(n)}, y^{(n)})\}$. Some mapping/relationship between the $x$ and $y$ values must be learned so that in the future, when given a new $x$ value, the computer can use accurately predict new $y$ values. For example, the input might be the heart rate pattern of a person and output might be whether or not he or she is having a heart attack. \\
+
+The $x$ values are vectors in $d$ dimensions. $x \in \mathbb{R}^d$. $y$ values can belong to different sets depending on the machine learning problem being approached. A wide range of house prices, for instance, can be predicted. On the other hand, for a system that determines whether an image is of a dog, the $y$ values are discrete. The answer is either  ``yes" or ``no." To begin learning supervised learning, an easy type of problem is \textbf{classification}. In classification, the $y$ values are discrete. In particular, if only two discrete outputs exist ($y \in \{+1, -1\}$), one is working with a special type of classification problem: the \textbf{binary classification} problem. \\
+
+Again, in the real world, inputs into a machine learning problem might be patients in a hospital or some songs. These are not vectors though. The process of encoding these real-world things as vectors is called \textbf{feature mapping}. \\
+
+The mapping a computer uses to understand the relationship between $x$ and $y$ values is called a \textbf{hypothesis}. It is basically some rule $h$ that takes in an $x$ value as input and returns a $y$ value as output. It has parameters to be discussed in greater depth later. The set of all parameters a hypothesis has is denoted as $\Theta$. $y=h(x; \Theta)$. \\
+
+Many different types of hypotheses exist depending on the machine learning problem one is trying to tackle. The set of all hypotheses that belong to one type form a \textbf{hypothesis class}. Parameters choose the suitable hypothesis for a dataset from the hypothesis class. If this is confusing, it will be made more clear later. \\
+
+How does one know that a hypothesis is accurate though? A biomedical company cannot ship a classifier that chronically says that x-rays of healthy people shows signs of pneumonia! A good place to begin is the predictions a hypothesis is making. Something called a \textbf{loss function} determines whether an individual prediction is accurate or not. A loss function looks like $L(g,a)$ when $g$ is the hypothesis's guess and $a$ is the right answer. The function returns how sad one should be that $g$ was predicted when $a$ was the actual answer. Smaller loss is better. So many different types of loss functions exist for different machine learning problems. Several are listed at the end of this document.\\
+
+A good way to begin testing how robust a hypothesis performs is to determine whether it can make accurate predictions on the training data it was given. \textbf{Training set error} is just that! It is the average of a hypothesis's losses on each pair of training data: $E_n(h)={1\over n}{\sum^{n}_{i=1}L(h(x^{(i)},\Theta),y^{(i)})}$.Low training set error is synonymous to a student knowing homework and review problems well in a Spanish class. \\
+
+However, just memorizing homework problem sets will not serve a student well on the Spanish final exam. Likewise, one must determine how well a hypothesis performs on new data. The \textbf{test error}, which uses $n'$ new values, does just that: $E_n(h)={1\over{n'}}{\sum_{i=n+1}^{n+n'}{L(h(x^{(i)},\Theta),y^{(i)})}}$. \\
+
+How is a hypothesis chosen from a hypothesis class though? How does one determine the parameters that work best for a dataset? Something called the \textbf{learning algorithm} is used. The learning algorithm takes in a dataset as input and returns a hypothesis as output. Many different types of learning algorithms will be discussed later.  \\
+
+Some loss functions that are useful to know are listed below. 
+\begin{itemize}
+    \item \textbf{Zero-One Loss}: $L(g,a)=\begin{cases} 
+      0 &  \text{if g=a}\\
+      1 &  \text{otherwise}
+   \end{cases}
+$
+    \item \textbf{Squared Loss}: $L(g,a)=(g-a)^2$
+    \item \textbf{Linear Loss}: $L(g,a)=|g-a|$
+\end{itemize}
+
+
+\end{document}
+
+
