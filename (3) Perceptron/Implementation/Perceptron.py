@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import matplotlib.pyplot as plt
 
 # loss function
@@ -42,12 +41,10 @@ def perceptron(dataset, T):
                 theta_not = theta_not + dataset[i][1]
     return (theta, theta_not)
 
-# two-dimensional perceptron with Matplotlib visualization
 def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 0, plotXMax = 100, plotYMin = -100, plotYMax = 100):
     dataset = positivePoints + negativePoints
     theta_not = 0
     theta = np.zeros((dataset[0][0].shape[0], 1))
-#    plt.ion()
     fig, ax = plt.subplots()
     plt.gca().set_xlim([plotXMin, plotXMax])
     plt.gca().set_ylim([plotYMin, plotYMax])
@@ -79,5 +76,7 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
 # positivePoints = [(np.array([[-2],[3]]),1), (np.array([[0],[1]]),1), (np.array([[2],[-1]]),1)]
 # negativePoints = [(np.array([[-2],[1]]),-1), (np.array([[0],[-1]]),-1), (np.array([[2],[-3]]),-1)]
 #
-# positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
-# negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
+positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
+negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
+
+perceptron_with_visualization(positivePoints, negativePoints, 15, -5, 5, -5, 5)
