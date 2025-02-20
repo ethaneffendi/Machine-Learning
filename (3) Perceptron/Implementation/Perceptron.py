@@ -1,6 +1,5 @@
 import numpy as np
 import random
-import seaborn as sns
 import matplotlib.pyplot as plt
 
 # loss function
@@ -48,7 +47,7 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
     dataset = positivePoints + negativePoints
     theta_not = 0
     theta = np.zeros((dataset[0][0].shape[0], 1))
-    plt.ion()
+#    plt.ion()
     fig, ax = plt.subplots()
     plt.gca().set_xlim([plotXMin, plotXMax])
     plt.gca().set_ylim([plotYMin, plotYMax])
@@ -69,7 +68,7 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
                 plt.gca().set_xlim([plotXMin, plotXMax])
                 plt.gca().set_ylim([plotYMin, plotYMax])
                 plt.draw()
-                plt.pause(2)
+                plt.pause(0.5)
     plt.show()
 
 
@@ -79,3 +78,6 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
 # dataset to try
 # positivePoints = [(np.array([[-2],[3]]),1), (np.array([[0],[1]]),1), (np.array([[2],[-1]]),1)]
 # negativePoints = [(np.array([[-2],[1]]),-1), (np.array([[0],[-1]]),-1), (np.array([[2],[-3]]),-1)]
+#
+# positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
+# negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
