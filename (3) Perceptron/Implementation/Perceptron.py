@@ -75,8 +75,6 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
 # dataset to try
 # positivePoints = [(np.array([[-2],[3]]),1), (np.array([[0],[1]]),1), (np.array([[2],[-1]]),1)]
 # negativePoints = [(np.array([[-2],[1]]),-1), (np.array([[0],[-1]]),-1), (np.array([[2],[-3]]),-1)]
-#
-positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
-negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
 
-perceptron_with_visualization(positivePoints, negativePoints, 15, -5, 5, -5, 5)
+# positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
+# negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
