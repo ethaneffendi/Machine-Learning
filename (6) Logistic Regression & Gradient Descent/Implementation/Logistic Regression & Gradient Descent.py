@@ -6,7 +6,7 @@ import math
 def negative_log_likelihood_loss(g, a):
     return -(a*np.log10(g) + (1-a)*np.log10(1-g))
 
-# sigmoid functiuon
+# sigmoid function
 def sigmoid(z):
     return 1/(1+(np.exp(-z)))
 
