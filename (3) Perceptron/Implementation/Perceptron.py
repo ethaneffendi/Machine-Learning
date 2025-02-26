@@ -65,7 +65,7 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
                 plt.gca().set_xlim([plotXMin, plotXMax])
                 plt.gca().set_ylim([plotYMin, plotYMax])
                 plt.draw()
-                plt.pause(0.5)
+                plt.pause(0.75)
     plt.show()
 
 
@@ -76,5 +76,6 @@ def perceptron_with_visualization(positivePoints, negativePoints, T, plotXMin = 
 # positivePoints = [(np.array([[-2],[3]]),1), (np.array([[0],[1]]),1), (np.array([[2],[-1]]),1)]
 # negativePoints = [(np.array([[-2],[1]]),-1), (np.array([[0],[-1]]),-1), (np.array([[2],[-3]]),-1)]
 
-# positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
-# negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
+positivePoints = [(np.array([[0.5],[3]]),1), (np.array([[0.4],[2.7]]),1), (np.array([[1],[3.5]]),1)]
+negativePoints = [(np.array([[0.5],[2]]),-1), (np.array([[1],[2.5]]),-1), (np.array([[1.5],[3]]),-1)]
+perceptron_with_visualization(positivePoints, negativePoints, 100, 0, 5, 0, 5)
