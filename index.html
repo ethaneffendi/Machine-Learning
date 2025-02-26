@@ -91,6 +91,7 @@
       \( j^* \gets \arg\min_{j \in \{1, ..., k\}} {E_n(h(\cdot,\theta,\theta_0))} \) <br>
       return \( \theta^{(j^*)}, \theta_0^{(j^*)} \) <br>
   </p>
+  <script src="https://gist.github.com/ethaneffendi/06cf8f947ad9c15482f53036f64a3050.js"></script>
   <hr>
 
   <!--Perceptron-->
@@ -132,6 +133,7 @@
       <li>Now, one may analyze \({1\over{||\theta^{(k)}||}}\). \(||\theta^{(k)}||^2 = ||\theta^{(k-1)}+y^{(i)}x^{(i)}||^2 = ||\theta^{(k-1)}||^2 + 2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}} + ||x^{(i)}||^2\). It is given in the perceptron convergence theorem that \(||x^{(i)}||^2 \leq R^2\). Also, \(2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}}\) is negative because \(\theta^{k}\) made a mistake. Therefore, \(||\theta^{(k-1)}||^2 + 2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}} + ||x^{(i)}||^2 \leq {kR^2}\). Thus, \({1\over||\theta^{(k)}||}\geq{1\over{\sqrt{k}R}}\).</li>
       <li>Putting everything together, \(\cos{\alpha} \geq {\sqrt{k}}{{\gamma}\over{R}}\). Provided that cosine's greatest output is 1, \(1\geq{{\sqrt{k}\gamma}\over{R}}\), so \(k\leq{({{R}\over{\gamma}})^2}\).</li>
   </ol>
+  <script src="https://gist.github.com/ethaneffendi/a8ae1c5ad9f4579f8dfdee864de89b3e.js"></script>
   <hr>
 
   <!--Polynomial Basis-->
@@ -190,7 +192,93 @@
   <hr>
 
   <!--Logistic Regression & Gradient Descent-->
-  
+  <h1 class="text">Logistic Regression and Gradient Descent</h1>
+  <p class="text">Another type of learning algorithm is one based on optimization. In minimizing some function \(J\), called an objective function, the learning algorithm should in effect minimize the training set error on \(D_n\) of the classifier it produces.  </p>
+  <p class="text">Objective function \(J\) should be written as \(J(\Theta) = {1\over{n}}{\sum^n_{i=1}}{L(h(x^{(i)}, \Theta),y^{(i)})+\lambda{R(\Theta)}}\). The first addend is the training set error of hypothesis \(h\). The second addend is a new concept. \(R(\Theta)\) is a regularizer. It prevents the learning algorithm from being too honed in on minimizing training set error. Sometimes, learning algorithms that are too focused on minimizing training set error produce a classifier that works too specifically well on training data that it is out of touch with the real-life data it will be thrown in the future. \(\lambda\) is a positive constant (a hyperparameter) that determines to what degree the regularizer will be considered. Also, one must know that \(\Theta\) is used to generally represent all parameters of \(h\). For the scope of logistic regression, \(\Theta\) encompasses \(\theta\) and \(\theta_0\).  </p>
+  <p class="text">The type of hypothesis produced in linear regression is different from a standard linear classifier. The hypothesis in linear regression is written as \(h(x; \theta, \theta_0)=\sigma(\theta^Tx+\theta_0)\) when \(\sigma\) is the sigmoid function. The sigmoid function is defined as \(\sigma(z)={{1}\over{1+e^{-z}}}\). Why can't one use a standard linear classifier and the zero-one loss function in the objective function to be optimized? Zero-one loss only says whether or not a separator classifies a point correctly or incorrectly. On the other hand, because \(\sigma(z)\in(0,1)\) and \(\sigma(0)=0.5\), the sigmoid function says how correctly or incorrectly a separator classifies a point. These semantics are what optimization takes advantage of in working towards the optimal set of parameters.</p>
+  <figure>
+    <img src="(6) Logistic Regression & Gradient Descent/Sigmoid Function.png" alt="Sigmoid Function" style="width:50%;">
+  </figure>
+  <p class="text">To actually classify points using \(h(x; \theta, \theta_0)=\sigma(\theta^Tx+\theta_0)\) though, one needs to interpret the output of \(\sigma\). For instance, if the threshold is 0.5, all outputs of \(\sigma\) greater than 0.5 will be considered +1 whereas all outputs less than or equal to 0.5 will be negative. However, because the bounds of the sigmoid function's range are 0 and 1, \(y^{(i)}\in{0,1}\) in the dataset. The most common setup is for the threshold to be 0.5. In that case, wherever \(\sigma(z)=0.5\) is the linear classifier.</p>
+  <figure>
+    <img src="(6) Logistic Regression & Gradient Descent/Classifier Using Sigmoid Function.png" alt="Classifier Using Sigmoid Function" style="width:50%;">
+  </figure>
+  <p class="text">To visualize this phenomenon in the two dimensional space, imagine a plane curved like the sigmoid function sticking out through the third axis. The separator is where the sigmoid axis is 0.5.</p>
+  <h2 class="text">Negative Log Likelihood Loss</h2>
+  <p class="text">The loss function that goes with the hypothesis logistic regression produces is called negative log likelihood loss. Deriving the function will allow one to make good sense of it.</p>
+  <ol class="text">
+    <li>The probability that \(\theta\) and \(\theta_0\) classify the dataset \(D_n\) can be written as \(\prod^n_{i=1}{\begin{cases}
+                g^{(i)},\ y^{(i)}=1 \\
+                1-g^{(i)} ,\ y^{(i)}=0
+            \end{cases}}=\prod^n_{i=1}({{g^{(i)}}^{y^{(i))}}+(1-g^{(i)})^{(1-y^{(i)})}})\).
+            Each data point being classified is an independent event. Therefore, the probability of them all being classified correctly is the product of each point's probability of being correctly classified.</li>
+    <li>Sums are easier to work with than products. Quite conveniently, the logarithm of a product is a sum. Also, because \(\log{x}\) is monotonic, minimizing \(\log{x}\) minimizes \(x\). Thus, one should just work with \(\log{(\prod^n_{i=1}({{g^{(i)}}^{y^{(i))}}+(1-g^{(i)})^{(1-y^{(i)})}})})\). Computing the logarithm produces \(\sum^n_{i=1}({y^{(i)}\log{g^{(i)}}+(1-y^{(i)})\log{(1-g^{i})}})\).</li>
+    <li>Even though the sum works for maximizing the probability that \(\theta\) and \(\theta_0\) classify the data, the job is still to design a loss functions. Loss functions should be minimized. The simple solution is negating the sum: \(-\sum^n_{i=1}({y^{(i)}\log{g^{(i)}}+(1-y^{(i)})\log{(1-g^{i})}})\).</li>
+    <li>The loss function will simply be the summand of the summation: \(L(g,a)=-(a\log{g}+(1-a)\log{(1-g)})\).</li>
+  </ol>
+  <p class="text">Negative log likelihood loss is also called cross entropy loss or log loss.  </p>
+  <h2 class="text">Regularizer</h2>
+  <p class="text">A common regularizer is \(R(\Theta)=||\Theta||^2\). It tries to keep the norms of the parameters small during training. As a result, the learning algorithm will not try too hard to produce a classifier that does well on outlier points. The regularizer also prevents the classifier from overfitting the provided training data.</p>
+  <h2 class="text">Learning Algorithm for Logistic Regression: Gradient Descent</h2>
+  <p class="text">Gradient descent is a common optimization learning algorithm for logistic regression. To understand how gradient descent works, one can begin by observing it in one dimension.  </p>
+  <p class="text">Say there is some function \(f\), some starting position called \(x_{init}\), and some step size \(\eta\). The algorithm obtains the derivative of \(f\) at \(x_{init}\). It then moves in the negative direction of the derivative. The size of the step it takes is determined by \(\eta\). Eventually, after enough moving around, gradient descent should find a relative minimum of \(f\).  </p>
+  <figure>
+    <img src="(6) Logistic Regression & Gradient Descent/Gradient Descent.png" alt="Gradient Descent" style="width:50%;">
+  </figure>
+  <p class="text">In the figure above, \(x\) will continue bouncing back and forth until its movements are less than some tolerance constant \(\epsilon\). </p>
+  <h2 class="text">Partial Derivatives and Gradients</h2>
+  <p class="text">Examine the multivariable function \(f(x,y) = x^2y\). The partial derivative \(\frac{\partial{x}}{\partial{f}}\) is the derivative of \(x^2y\) when y is treated like a constant. The same is true for \(\frac{\partial{y}}{\partial{f}}\), except \(x\) is treated like a constant. Neither partial derivative tells the entire rate of change of \(f\), but they do give insight into how \(f\) changes as one of its variables does. The gradient of \(f\), written as \(\nabla{f}\) is the vector of all partial derivatives of \(f\):
+        \(\begin{bmatrix}
+               \frac{\partial{x}}{\partial{f}}
+               \frac{\partial{y}}{\partial{f}}
+        \end{bmatrix}\).</p>
+
+  <h2 class="text">Gradient Descent in Multiple Dimensions</h2>
+  <div class="algorithm">
+  <p>
+      Algorithm: Gradient Descent in Multiple Dimensions <br>
+      Input: \( \theta_{init} \), \( f \), \( \nabla_\theta{f} \), \( \epsilon \), \( \eta \) <br>
+      \( \theta^{(0)} = \theta_{init} \) <br>
+      \( t = 0 \) <br>
+      While \( f(\theta^{(t)}) - f(\theta^{(t-1)}) \geq \epsilon \): <br>
+      &emsp; \( t = t + 1 \) <br>
+      &emsp; \( \theta^{(t)} = \theta^{(t-1)} - \eta \nabla{f(\theta^{(t-1)})} \) <br>
+      Return \( \theta \) <br>
+  </p>
+  </div>
+  <h2 class="text">Gradient Descent for Logistic Regression</h2>
+  <p class="text">Gradient descent for logistic regression uses the listed formulas. </p>
+  <p class="text">\(J(\theta, \theta_0) = {1\over{n}}{\sum_{i=1}^n{L(\sigma(\theta^Tx+\theta_0),y^{(i)})}+\frac{\lambda}{2}{||\theta||^2}}\).  </p>
+  <p class="text">\(\nabla_\theta{J(\theta, \theta_0)}=\frac{1}{n}\sum_{i=1}^{n}{(\sigma(\theta^Tx+\theta_0),y^{(i)})-y^{(i)})x^{(i)}}+\lambda\theta\)</p>
+  <p class="text">\(\frac{\partial J(\theta, \theta_0)}{\partial \theta_0}={1\over{n}}\sum^n_{i=1}({\sigma(\theta^Tx+\theta_0)}-y^{(i)})\)  </p>
+  <p class="text">The algorithm is the same, but the edits are the subtraction of the gradient above and the partial derivative above from \(\theta_{(t)}\) and \(\theta_0^{(t)}\) inside the loop.</p>
+  <script src="https://gist.github.com/ethaneffendi/4918217721ab695f825ce67bbdd5f297.js"></script>
+  <hr>
+
+  <!--Regression-->
+  <h1 class="text">Regression</h1>
+  <p class="text">
+    Like classification, regression is a type of supervised learning setup. Thus, its dataset is still \(D_n = \{(x^{(1)}, y^{(1)}), ... ,(x^{(n)}, y^{(n)})\}\). \(x^{(i)}\in\mathbb{R}^d\), but the set \(y^{(i)}\) belongs to will change: \(y^{(i)}\in\mathbb{R}\). Whereas the \(y\) values in classification were discrete categories, the \(y\) values in regression are continuous values. For example, one might use regression to predict a company's stock price or the temperature in two days. Neither stock price nor temperature should be predicted using categories like \(\{+1, -1\}\); they are continuous values. <br><br>
+    The hypothesis for linear regression (finding a trend line) is written as \(h(x; \theta, \theta_0) = \theta^Tx+\theta_0\) when \(\theta\in\mathbb{R}^d\) and \(\theta_0\in\mathbb{R}\). <br><br>
+    The standard loss function that is conventionally used for linear regression is called squared loss: \(L(g, a) = (g-a)^2\). <br><br>
+    The regression setup involving the linear regression hypothesis and squared loss function is so common that it has earned a name: ordinary least squares. <br>
+  </p>
+  <h2 class="text">Using Optimization to Find a Hypothesis</h2>
+  <p class="text">
+    Quite naturally, upon seeing \(h(x;\theta,\theta_0)=\theta^Tx+\theta_0\), one should want to use optimization to learn the best hypothesis for the dataset \(D_n\). Thus, an objective function must be written. To highlight how important regularizers are, \(J\) will first be written without \(\lambda{R(\Theta)}\): \(J(\theta, \theta_0)=\frac{1}{n}\sum^n_{i=1}{(\theta^Tx^{(i)}-\theta_0-y^{(i)})^2}\). The optimal parameters \(\theta_0^*\) and \(\theta^*\) are \(\arg\min_{\theta, \theta_0}{J(\theta, \theta_0)}\). The calculus way of finding a minimum will work: find the derivative of the objective function, set it to 0, solve for critical points, and prove that critical points are minima. One can most definitely compute the derivative of \(J\) with respect to each entry of \(\theta\) and whatnot to produce a system of equations that can be solved for optimal parameters, but using the matrix form of the system is more elegant. Say that \(W=
+    \begin{bmatrix}
+    x^{(1)}_1 & ... & x^{(1)}_d & 1\\
+    \vdots{} & \ddots & & \vdots{} \\
+    x^{(n)}_1 & ... & x^{(n)}_d & 1
+    \end{bmatrix}\). Each \(x\) value in \(D_n\) is turned into a row of \(W\). Each row has a \(1\) added to its end in order to account for \(\theta_0\) (a separator-through-origin in \(d\) dimensions can be turned into a separator-not-through-origin in \(d-1\) dimensions). Also, \(T=\begin{bmatrix}
+    y^{(1)}\\
+    \vdots \\
+    y^{(d)}
+    \end{bmatrix}\). Now, one can use linear algebra to find the parameter array \(\theta_{array}\) that minimizes a rewritten objective function \(J(\theta_{array})\) instead of finding the best \(\theta\) vector and \(\theta_0\) scalar for the original \(J(\theta, \theta_0)\). \(J(\theta,\theta_0)=J(\theta_{array})=(W\theta_{array}-T)^T(W\theta_{array}-T).\) Now, one needs to find the gradient (vector of partial derivatives) of \(J(\theta_{array})\), set it to \(0\), and solve for \(\theta_{array}\). \(\nabla_{\theta_{array}}J=\frac{2}{n}W^T(W\theta_{array}-T)\). \(0=\frac{2}{n}W^T(W\theta_{array}-T)\), \(0=W^T(W\theta_{array}-T)\), \(0=W^TW\theta_{array}-W^TT\), \(W^TW\theta_{array}=W^TT\), \(W^TW\theta_{array}=W^TT\), \(W^TW\theta_{array}=W^TT\), \(W^TW\theta_{array}=W^TT\), \((W^TT)^{-1}W^TW\theta_{array}=(W^TT)^{-1}W^TT\), so \(\theta_{array}^*=(W^TT)^{-1}W^TT\). This is an example of the rare closed form solution. One does not need a fancy computer or algorithm to use a closed form solution. It simply describes how to solve for \(\theta_{array}^*\) using pencil and paper. The problem with \(\theta_{array}^*=(W^TT)^{-1}W^TT\) is that \((W^TT)\) might not be invertible such that \((W^TT)^{-1}\) can be computed. The way of overcoming this problem is to add the regularizer \(||\theta||^2\) to \(J\) to create an objective function called the ridge regression objective function. \(J_{ridge}(\theta, \theta_0)=[\frac{1}{n}{\sum_{i=1}^n{(\theta^Tx+\theta_0-y^{(i)})^2}}]+\lambda{||\theta||^2}\). The regularizer does not impact \(\theta_0\) because offsets do not have to be forced toward \(0\) to prevent overcomplicated parameters. \(\nabla_{\theta_{array}{J_{ridge}}}=\frac{2}{n}W^T(W\theta_{array}-T)+2\lambda\theta_{array}\). Solving for \(0\) yields \(\theta_{array}^*=(W^TW+n\lambda{I})^{-1}W^TT\). \(I\) is the identity matrix (the values along its diagonal are all set to 1 while the rest of the matrix is set to 0). Its diagonal of 1s being multiplied by \(n\) and \(\lambda>0\) adds weight to the diagonal (ridge) of \(W^TT\), making it invertible.\<br><br>
+    Inverting \(W^TW+n\lambda{I}\) takes \(O(d^3n)\) time, so for high dimension datasets, gradient descent or stochastic gradient descent will be better for performance than the analytic method described above. For gradient descent or stochastic gradient descent, one must know that \(\nabla_{\theta_{array}}J_{ridge}=\frac{2}{n}\sum_{i=1}^n{(\theta_{array}^Tx^{(i)}+\theta_0-y^{(i)})x^{(i)}}+2\lambda{\theta_{array}}\) and \(\frac{\partial{J}}{\partial\theta_{array}}=\frac{2}{n}{\sum_{i=0}^{n}}(\theta^Tx^{(i)}+\theta_0-y^{(i)})\).
+  </p>
+  <script src="https://gist.github.com/ethaneffendi/d43edfc0ad9adf300276c0c0d69fc115.js"></script>
+  <hr>
 
 </body>
 </html>
