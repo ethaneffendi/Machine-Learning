@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="" />
+  <title>Supervised Learning</title>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+  <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+  <hr>
+
+  <!--Supervised Learning-->
+  <h1 class="text">Supervised Learning</h1>
+  <p class="text">
+    Supervised learning is the macihine learning setup that involves a dataset organized into pairs of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values: <span class="math inline">\(D_n = \{(x^{(1)}, y^{(1)}), ... , (x^{(n)}, y^{(n)})\}\)</span>. Some mapping must be learned between the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values so that given a new <span class="math inline">\(x\)</span> encountered in the future, a computer can accurately predict the corresponding <span class="math inline">\(y\)</span>. For example, <span class="math inline">\(x\)</span> values might be a patient's vital signs and <span class="math inline">\(y\)</span> values might be whether or not that patient is having a heart attack.
+  </p>
+  <p class="text">
+    <span class="math inline">\(x\)</span> values are vectors in <span class="math inline">\(d\)</span> dimensions: <span class="math inline">\(x^{(i)} \in \mathbb{R}^d\)</span>. The set <span class="math inline">\(y\)</span> values belong to can change depending on what problem is being approached. However, when the goal is to classify <span class="math inline">\(x\)</span> values (whether or not a patient's vital signs indicate a heart attack or not), the set <span class="math inline">\(y\)</span> belongs to should contain discrete numbers. In particular, if there are only two categories <span class="math inline">\(x\)</span> can be classified as, then one is working with binary classification: <span class="math inline">\(y^{(i)} \in \{+1, -1\}\)</span>.
+  </p>
+  <p class="text">
+    The relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values that a computer learns is called a hypothesis. It is some function that takes in an <span class="math inline">\(x\)</span> and returns a <span class="math inline">\(y\)</span>. Hypothesis also have parameters <span class="math inline">\(\Theta\)</span>, but they will be elaborated on later. A hypothesis is written as <span class="math inline">\(y = h(x; \Theta)\)</span>.
+  </p>
+  <p class="text">
+    How does one know that the prediction a hypothesis makes is accurate though? Loss functions are the answer. They are written as <span class="math inline">\(L(g,a)\)</span>. The loss function takes in a hypothesis's guess <span class="math inline">\(g\)</span>. <span class="math inline">\(g\)</span> is basically just the value the hypothesis predicts given some <span class="math inline">\(x\)</span> it encounters. <span class="math inline">\(a\)</span> is the correct value that the hypothesis should return. The loss function returns how sad one should be that <span class="math inline">\(g\)</span> was guessed when <span class="math inline">\(a\)</span> was the actual answer. Because being sad is not fun, lower loss is better. A plethora of different loss functions exist.
+  </p>
+  <ul class="text">
+    <li>squared loss: <span class="math inline">\(L(g,a) = (g-a)^2\)</span></li>
+    <li>linear loss: <span class="math inline">\(L(g,a) = |g-a|\)</span></li>
+    <li>0-1 loss: <span class="math inline">\(
+        L(g,a)=
+        \begin{cases}
+            0 & \text{if } g = a \\
+            1 & \text{otherwise}
+        \end{cases}
+    \)</span>
+      </li>
+  </ul>
+  <p class="text">
+    Now, how can one measure how well a hypothesis works? To begin, the hypothesis should work well on the data it was trained on. The training set error allows measures the average loss of the hypothesis on the training data: <span class="math inline">\(E_n(h) = {1\over{n}}\sum^{n}_{i=1}{L(h(x^{(i)}),y^{(i)})}\)</span>. The hypothesis can be likened to a student in a calculus class though. Just memorizing homework answers does not guarantee the student full marks on the final exam. Think of the training set like a bunch of homework problems. The student should be able to generalize from practice and apply skills to test questions on final exam day. To really understand how well a hypothesis will perform on new data, one should save out a portion of the training data and call it the testing set. The test error is the average of the hypothesis's losses on the test set data: <span class="math inline">\(E(h) = {1\over{n'}}\sum^{n+n'}_{i=n+1}L(h(x^{(i)}),y^{(i)})\)</span>.
+  </p>
+  <p class="text">
+    The computer learns hypotheses from datasets by using learning algorithms. However, learning algorithms will be explained more extensively later.
+  </p>
+  <hr>
+
+  <!--Linear Classifiers-->
+  <h1 class="text">Linear Classifiers</h1>
+  <p class="text">
+    A linear classifier is a type of hypothesis for the supervised learning setup. To visualize how linear classifiers work, one must plot all <span class="math inline">\(x\)</span> values in <span class="math inline">\(D_n\)</span> onto the <span class="math inline">\(\mathbb{R}^d\)</span> space. Each axis of the <span class="math inline">\(\mathbb{R}^d\)</span> space (i.e. <span class="math inline">\(x_1, x_2, ... , x_n\)</span>) corresponds to a dimension of the vector <span class="math inline">\(x\)</span>. The first dimension of <span class="math inline">\(x\)</span> is its first entry, the second dimension is its second entry, and so on. Some of the plotted points are assigned a <span class="math inline">\(y\)</span> value of <span class="math inline">\(+1\)</span> whereas others are assigned to <span class="math inline">\(-1\)</span>.
+  </p>
+  <figure>
+    <img src="(2) Linear Classifiers/Plotted X Values.png" alt="Plotted X Values" width="50%">
+  </figure>
+  <p class="text">
+    Once the dataset is visualized on a graph, how to write a classifier becomes really obvious! For the two-dimensional space above, one just needs to draw a line that separates <span class="math inline">\(\mathbb{R}^2\)</span> into a <span class="math inline">\(+1\)</span> subspace and <span class="math inline">\(-1\)</span> subspace. In other words, one just needs to find a line such that all points that were assigned <span class="math inline">\(+1\)</span> in the dataset sit on one side while all points that were assigned <span class="math inline">\(-1\)</span> sit on the other side. The separator that does the job is called a linear classifier.
+  </p>
+  <figure>
+    <img src="(2) Linear Classifiers/Classified X Values.png" alt="Classified X Values" width="50%">
+  </figure>
+  <p class="text">
+    For a dataset with two-dimensional <span class="math inline">\(x\)</span> vectors, linear classifiers, as described earlier, are just lines. For a dataset with three-dimensional <span class="math inline">\(x\)</span> vectors, linear classifiers are planes. When the dataset contains <span class="math inline">\(n\)</span>-dimensional <span class="math inline">\(x\)</span> vectors, the general term used to describe the separator that classifies them is a hyperplane. For the <span class="math inline">\(\mathbb{R}^n\)</span> space, hyperplanes are a space with <span class="math inline">\(n-1\)</span> dimensions. A hyperplane has a normal that points in the direction of the <span class="math inline">\(+1\)</span> subspace.
+  </p>
+  <p class="text">
+    A linear classifier may be written formally as:
+    <span class="math inline">
+      \(h(x; \theta, \theta_0) = \text{sign}(\theta^T{x} + \theta_0) =
+      \begin{cases}
+          +1, & \theta^T x + \theta_0 > 0 \\
+          -1, & \text{otherwise}
+      \end{cases}\)
+    </span>.
+    Visibly, it has two parameters <span class="math inline">\(	\theta\)</span> and <span class="math inline">\(	\theta_0\)</span>. Learning algorithms try to find the parameters that will construct a separator that accurately classifies <span class="math inline">\(+1\)</span> from <span class="math inline">\(-1\)</span>. <span class="math inline">\(	\theta \in \mathbb{R}^d\)</span> and <span class="math inline">\(	\theta_0\in\mathbb{R}\)</span>.
+  </p>
+  <p class="text">
+    The simplest learning algorithm that one can begin with is the random linear classifier algorithm. The algorithm works by producing random parameters <span class="math inline">\(k\)</span> times. At the end, it returns the parameters with the lowest training set error. <span class="math inline">\(k\)</span> is called a hyperparameter. It is not a parameter of the hypothesis. Rather, it is a parameter of the learning algorithm. It impacts how training occurs.
+  </p>
+  <p>
+      Algorithm: Random Linear Classifier <br>
+      Input: \(D_n\), \(k\) <br>
+      for \(j = 1\) to \(k\): <br>
+      &emsp; \( \theta^{(j)} \gets \text{random}(\mathbb{R}^d) \) <br>
+      &emsp; \( \theta_0^{(j)} \gets \text{random}(\mathbb{R}) \) <br>
+      end for <br>
+      \( j^* \gets \arg\min_{j \in \{1, ..., k\}} {E_n(h(\cdot,\theta,\theta_0))} \) <br>
+      return \( \theta^{(j^*)}, \theta_0^{(j^*)} \) <br>
+  </p>
+  <hr>
+
+  <!--Perceptron-->
+  <h1 class="text">Perceptron</h1>
+  <pclass="text">Perceptron is a more sophisticated learning algorithm for producing linear classifiers.</p>
+  <p>
+    Input: \(D_n\), \(T\) <br>
+    \(\theta = \overline{0}\) <br>
+    \(\theta_0 = 0\) <br>
+    For \(t = 1\) to \(T\) <br>
+    &emsp;For \(i=1\) to \(n\) <br>
+        &emsp;&emsp;If \(y^{(i)}(\theta^Tx^{i}+\theta_0)\leq0\) <br>
+            &emsp;&emsp;&emsp;\(\theta = \theta + y^{(i)}x^{(i)}\) <br>
+            &emsp;&emsp;&emsp;\(\theta_0 = \theta_0+y^{(i)}\) <br>
+    Return \(\theta, \theta_0\)
+  </p>
+  <p class="text">The algorithm iterates through the dataset \(D_n\) \(T\) times (\(T\) is a hyperparameter). At each point in the dataset, it checks if \(y^{(i)}(\theta^Tx^{(i)}+\theta_0)\leq0\). The if statement basically determines whether or not the current \(\theta\) classified the point at index \(i\) correctly. If \((x^{(i)}, y^{(i)})\) were correctly classified, then \(y^{(i)}(\theta^Tx^{(i)}+\theta_0)\) would be positive. Recall that \(\theta^Tx^{(i)}+\theta_0\) is the input to the sign function in the linear classifier hypothesis. Thus, if it is negative and \(y^{(i)}\) is also negative, their product should be positive. If both are positive, their product is positive too. If they are of different signs (an incorrect classification occurred), then the if statement would trigger some modifications. In particular, it modifies \(\theta\) to \(\theta+y^{(i)}x^{(i)}\) and \(\theta_0\) to \(\theta_0+y^{(i)}\). </p>
+  <p class="text">The modifications that perceptron makes to the parameters \(\theta\) and \(\theta_0\) probably are not the obvious “right move.” One is probably left wondering why Rosenblatt, the inventor of perceptron, chose to set \(\theta=\theta+y^{(i)}x^{(i)}\) and \(\theta_0=\theta_0+y^{(i)}\). This brings up another interesting discussion point. Whereas the inner workings of most algorithms have been built intuitively around the problem to be solved, perceptron was simply introduced and left for scholars to analyze over the decades. Years of papers have determined that Rosenblatt's modifications are quite functional. </p>
+  <p class="text">To better analyze how perceptron works and even introduce a theorem about it, exploring a simpler version of the algorithm is useful. Think of perceptron-through-origin as perceptron without any offset (\(\theta_0\)) parameter. Some playing with dimensions later on will show that what applies to perceptron-through-origin applies to perceptron with an offset.</p>
+  <h2 class="text">Linear Separability</h2>
+  <p class="text">Linear separability is a property of a dataset \(D_n\). \(D_n\) is linearly separable when there exists some \(\theta\) (no \(\theta_0\) because the current discussion is about perceptron-through-origin) such that \(y^{(i)}(\theta^Tx^{(i)})>0\) for all \(i\). In other words, all points in the dataset \(D_n\) are correctly classified.</p>
+  <figure>
+      <img src="(3) Perceptron/Linear Separability.png" alt="Linear Separability" style="width:50%;">
+  </figure>
+  <h2 class="text">Margin</h2>
+  <p class="text">The margin of a data point \((x,y)\) with repsect to a linear separator (a hyperplane) is \(y{{\theta^Tx}\over{||\theta||}}\). \({{\theta^Tx}\over{||\theta||}}\) is the signed distance from the point to the separator. If \(y\) is \(-1\) and \((x,y)\) is correctly classified, then \({{\theta^Tx}\over{||\theta||}}\) should be negative. \(y\) is the target label (either \(+1\) or \(-1\)). Therefore, a correctly classified point should have a positive margin. An incorrectly classified point should have a negative margin. A higher margin is better because the farther a point is away from the classifier, the better classified it is (not a close call).</p>
+  <figure>
+      <img src="(3) Perceptron/Margin of a Point.png" alt="Margin of a Point" style="width:50%;">
+  </figure>
+  <p class="text">The margin of an entire dataset with respect to a linear separator is equal to the margin of the point it contains that has the lowest margin: \(\min_{i}{y^{(i)}{{\theta^Tx^{(i)}}\over{||\theta||}}}\).</p>
+  <h2 class="text">Perceptron Convergence Theorem</h2>
+  <p class="text">The perceptron convergence states that if (a) there exists some \(\theta^*\) such that \(y^{(i)}{{\theta^Tx^{(i)}}\over{||\theta||}}>\gamma>0\) for all \(i\) (in other words, if the margin of the dataset with respect to \(\theta^*\)) is greater than or equal to some constant \(\gamma\)) and (b) \(||x^{(i)}||\leq{R}\) for all \(i\) (in other words, when graphed, the data points are contained in a circle of radius \(R\)), then the perceptron will make at most \(\left({{R}\over{\gamma}}\right)^2\) modifications during training.</p>
+  <h2 class="text">Proof of the Perceptron Convergence Theorem</h2>
+  <p class="text">Say that \(\theta^{(k)}\) is the hypothesis produced after \(k\) modifications during training and \(\theta^*\) is the parameter such that \(y^{(i)}{{\theta^{*T}x^{(i)}}\over{||\theta^*||}}\geq\gamma>0\) for all \(i\). The angle between \(\theta^{(k)}\) and \(\theta^*\) is \(\alpha\). To show that \(\theta^{(k)}\) will converge to become \(\theta^*\) as \(k\) increases, one must show that the angle \(\alpha\) becomes smaller and smaller. As the angle becomes smaller, its cosine should become greater (i.e. \(\cos{\alpha}\) should increase).</p>
+  <ol class="text">
+      <li>There is a formula that describes the cosine of the angle \(\alpha\) between two vectors: \(\cos{\alpha}={{a\cdot{b}}\over{||a|||b||}}\). Thus, \(\cos{\alpha}={{\theta^*\cdot\theta^{(k)}}\over{||\theta^*||||\theta^{(k)}||}}\).</li>
+      <li>One can break \({{\theta^*\cdot\theta^{(k)}}\over{||\theta^*||||\theta^{(k)}||}}\) down into \({{\theta^*\cdot\theta^{(k)}}\over{||\theta^*||}}\cdot{1\over{||\theta^{(k)}||}}\).</li>
+      <li>First, one should analyze \({{\theta^*\cdot\theta^{(k)}}\over{||\theta^*||}}\). \(\theta^{(k)}=(\theta^{(k-1)}+y^{(i)}x^{(i)})\) when \(i\) is the index of the point at which perceptron made its last modification to \(\theta\). Using this information, \({{\theta^*\cdot\theta^{(k)}}\over{||\theta^*||}}={{(\theta^{(k-1)}+y^{(i)}x^{(i)})\theta^*}\over{||\theta^*||}}={{\theta^{(k-1)}\cdot\theta^*}\over{||\theta^*||}}+{{y^{(i)}x^{(i)}\cdot\theta^*}\over{||\theta^*||}}\). Recall that \({{y^{(i)}x^{(i)}\cdot\theta^*}\over{||\theta^*||}}\) is the margin, which is greater than or equal to \(\gamma\). Thus, \({{\theta^{(k-1)}\cdot\theta^*}\over{||\theta^*||}}+{{y^{(i)}x^{(i)}\cdot\theta^*}\over{||\theta^*||}}\geq{k\gamma}\).</li>
+      <li>Now, one may analyze \({1\over{||\theta^{(k)}||}}\). \(||\theta^{(k)}||^2 = ||\theta^{(k-1)}+y^{(i)}x^{(i)}||^2 = ||\theta^{(k-1)}||^2 + 2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}} + ||x^{(i)}||^2\). It is given in the perceptron convergence theorem that \(||x^{(i)}||^2 \leq R^2\). Also, \(2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}}\) is negative because \(\theta^{k}\) made a mistake. Therefore, \(||\theta^{(k-1)}||^2 + 2y^{(i)}\theta^{(k-1)}\cdot{x^{(i)}} + ||x^{(i)}||^2 \leq {kR^2}\). Thus, \({1\over||\theta^{(k)}||}\geq{1\over{\sqrt{k}R}}\).</li>
+      <li>Putting everything together, \(\cos{\alpha} \geq {\sqrt{k}}{{\gamma}\over{R}}\). Provided that cosine's greatest output is 1, \(1\geq{{\sqrt{k}\gamma}\over{R}}\), so \(k\leq{({{R}\over{\gamma}})^2}\).</li>
+  </ol>
+  <hr>
+
+  <!--Polynomial Basis-->
+  <h1 class="text">Polynomial Basis</h1>
+  <h2 class="text">Reducing Perceptron-Not-Through-Origin to Perceptron-Through-Origin</h2>
+  <p class="text">
+    As promised earlier, the problem of perceptron-not-through-origin can be reduced to the problem of perceptron-through-origin. The key lies in transforming the dataset used from the \( \mathbb{R}^d \) space to a \( \mathbb{R}^D \) space when \( D > d \).
+  </p>
+  <p class="text">
+    Recall that the parameters of a separator not through the origin are \( \theta=[\theta_1, ... \theta_d] \) and \( \theta_0 \), a scalar. Say that these two parameters are taken to create a single one called \( \theta_{new} \): \( \theta_{new} = [\theta_1, ... \theta_d, \theta_0] \). \( \theta_{new} \) is basically just \( \theta \) with \( \theta_0 \) put in as the last entry. Now, each \( x \) value vector in the dataset must also be modified. Say that \( x_{new} = [x_1, ...,x_d,1] \). \( x_{new} \) is basically just \( x \) with \( 1 \) put in as the last entry. \( \theta^T_{new}x_{new} = \theta_1x_1 + ... + \theta_dx_d+(1)\theta_0=\theta_1x_1+...+\theta_dx_d+\theta_0=\theta^Tx+\theta_0 \). A classifier-not-through-origin in \( d \) dimensions can be turned into a classifier-through-origin in \( d+1 \) dimensions. Thus, even though the perceptron convergence theorem from before was only proved for perceptron through origin, transformation shows that the theorem also applies to perceptron-not-through-origin.
+  </p>
+  <figure>
+    <img src="(4) Polynomial Basis/Perceptron-Not-Through-Origin to Perceptron-Through-Origin.png" alt="Perceptron-Not-Through-Origin to Perceptron-Through-Origin" style="width:50%;">
+  </figure>
+  <h2 class="text">Polynomial Basis</h2>
+  <p class="text">
+    The same concept can be applied to a dataset that is not linearly separable in \( d \) dimensions. By moving the dataset into \( d+1 \), \( d+2 \), or more generally, \( d+n \) dimensions, one can make it linearly separable.
+  </p>
+  <figure>
+    <img src="(4) Polynomial Basis/Linearly Separable in Higher Dimensions.png" alt="Linearly Separable in Higher Dimensions" style="width:50%;">
+  </figure>
+  <p class="text">
+    A systematic way of transforming data into higher dimensions exists. It is called polynomial basis.
+  </p>
+  <div style="text-align: center;" class="text">
+    <table>
+      <tr>
+        <td>order</td>
+        <td>in general</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>\([1]\)</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>\([1, x_1, ... x_d]\)</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>\([1, x_1, ... x_d, x_1^2, x_1x_2, ... \text{all two way products}]\)</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>\([1, x_1, ... x_d, x_1^2, x_1x_2, ... \text{all two way products}, x_1^3, ... \text{all three way products}]\)</td>
+      </tr>
+      <tr>
+        <td>...</td>
+        <td>...</td>
+      </tr>
+    </table>
+  </div>
+  <p class="text">
+    For an example, take \([x_1, x_2]\). Using polynomial basis to transform it to the second degree yields \([1, x_1, x_2, x_1^2, x_1x_2, x^2]\).
+  </p>
+  <hr>
+
+  <!--Logistic Regression & Gradient Descent-->
+  
+
+</body>
+</html>
