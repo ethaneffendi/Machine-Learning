@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="author" content="" />
+    <title>Ethan Effendi - Machine Learning</title>
+    <script
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+    type="text/javascript"></script>
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <!--Supervised Learning-->
+    <h1 class="text">Supervised Learning</h1>
+    <p class="text">
+      Supervised learning is the macihine learning setup that involves a dataset organized into pairs of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values: <span class="math inline">\(D_n = \{(x^{(1)}, y^{(1)}), ... , (x^{(n)}, y^{(n)})\}\)</span>. Some mapping must be learned between the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values so that given a new <span class="math inline">\(x\)</span> encountered in the future, a computer can accurately predict the corresponding <span class="math inline">\(y\)</span>. For example, <span class="math inline">\(x\)</span> values might be a patient's vital signs and <span class="math inline">\(y\)</span> values might be whether or not that patient is having a heart attack.
+    </p>
+    <p class="text">
+      <span class="math inline">\(x\)</span> values are vectors in <span class="math inline">\(d\)</span> dimensions: <span class="math inline">\(x^{(i)} \in \mathbb{R}^d\)</span>. The set <span class="math inline">\(y\)</span> values belong to can change depending on what problem is being approached. However, when the goal is to classify <span class="math inline">\(x\)</span> values (whether or not a patient's vital signs indicate a heart attack or not), the set <span class="math inline">\(y\)</span> belongs to should contain discrete numbers. In particular, if there are only two categories <span class="math inline">\(x\)</span> can be classified as, then one is working with binary classification: <span class="math inline">\(y^{(i)} \in \{+1, -1\}\)</span>.
+    </p>
+    <p class="text">
+      The relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values that a computer learns is called a hypothesis. It is some function that takes in an <span class="math inline">\(x\)</span> and returns a <span class="math inline">\(y\)</span>. Hypothesis also have parameters <span class="math inline">\(\Theta\)</span>, but they will be elaborated on later. A hypothesis is written as <span class="math inline">\(y = h(x; \Theta)\)</span>.
+    </p>
+    <p class="text">
+      How does one know that the prediction a hypothesis makes is accurate though? Loss functions are the answer. They are written as <span class="math inline">\(L(g,a)\)</span>. The loss function takes in a hypothesis's guess <span class="math inline">\(g\)</span>. <span class="math inline">\(g\)</span> is basically just the value the hypothesis predicts given some <span class="math inline">\(x\)</span> it encounters. <span class="math inline">\(a\)</span> is the correct value that the hypothesis should return. The loss function returns how sad one should be that <span class="math inline">\(g\)</span> was guessed when <span class="math inline">\(a\)</span> was the actual answer. Because being sad is not fun, lower loss is better. A plethora of different loss functions exist.
+    </p>
+    <ul class="text">
+      <li>squared loss: <span class="math inline">\(L(g,a) = (g-a)^2\)</span></li>
+      <li>linear loss: <span class="math inline">\(L(g,a) = |g-a|\)</span></li>
+      <li>0-1 loss: <span class="math inline">\(
+          L(g,a)=
+          \begin{cases}
+              0 & \text{if } g = a \\
+              1 & \text{otherwise}
+          \end{cases}
+      \)</span>
+        </li>
+    </ul>
+    <p class="text">
+      Now, how can one measure how well a hypothesis works? To begin, the hypothesis should work well on the data it was trained on. The training set error allows measures the average loss of the hypothesis on the training data: <span class="math inline">\(E_n(h) = {1\over{n}}\sum^{n}_{i=1}{L(h(x^{(i)}),y^{(i)})}\)</span>. The hypothesis can be likened to a student in a calculus class though. Just memorizing homework answers does not guarantee the student full marks on the final exam. Think of the training set like a bunch of homework problems. The student should be able to generalize from practice and apply skills to test questions on final exam day. To really understand how well a hypothesis will perform on new data, one should save out a portion of the training data and call it the testing set. The test error is the average of the hypothesis's losses on the test set data: <span class="math inline">\(E(h) = {1\over{n'}}\sum^{n+n'}_{i=n+1}L(h(x^{(i)}),y^{(i)})\)</span>.
+    </p>
+    <p class="text">
+      The computer learns hypotheses from datasets by using learning algorithms. However, learning algorithms will be explained more extensively later.
+    </p>
+    <hr>
+  </body>
+</html>

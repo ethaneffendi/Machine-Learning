@@ -12,12 +12,22 @@
   <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
-
+<body class="text">
+  <!--Table of Contents-->
+  <h1 class="text">Table of Contents</h1>
+    <p class="text">Notes from MIT OCW's 6.036 (Introduction to Machine Learning) Lectures by Leslie Kaelbling:</p>
+    <ul class="text">
+      <li><a href="#6.036SupervisedLearning">Supervised Learning</a></li>
+      <li><a href="#6.036LinearClassifiers">Linear Classifiers</a></li>
+      <li><a href="#6.036Perceptron">Perceptron</a></li>
+      <li><a href="#6.036PolynomialBasis">Polynomial Basis</a></li>
+      <li><a href="#6.036LogisticRegression&GradientDescent">Logistic Regression & Gradient Descent</a></li>
+      <li><a href="#6.036Regression">Regression</a></li>
+    </ul>
   <hr>
 
   <!--Supervised Learning-->
-  <h1 class="text">Supervised Learning</h1>
+  <h1 class="text" id = "6.036SupervisedLearning">Supervised Learning</h1>
   <p class="text">
     Supervised learning is the macihine learning setup that involves a dataset organized into pairs of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values: <span class="math inline">\(D_n = \{(x^{(1)}, y^{(1)}), ... , (x^{(n)}, y^{(n)})\}\)</span>. Some mapping must be learned between the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values so that given a new <span class="math inline">\(x\)</span> encountered in the future, a computer can accurately predict the corresponding <span class="math inline">\(y\)</span>. For example, <span class="math inline">\(x\)</span> values might be a patient's vital signs and <span class="math inline">\(y\)</span> values might be whether or not that patient is having a heart attack.
   </p>
@@ -51,7 +61,7 @@
   <hr>
 
   <!--Linear Classifiers-->
-  <h1 class="text">Linear Classifiers</h1>
+  <h1 class="text" id = "6.036LinearClassifiers">Linear Classifiers</h1>
   <p class="text">
     A linear classifier is a type of hypothesis for the supervised learning setup. To visualize how linear classifiers work, one must plot all <span class="math inline">\(x\)</span> values in <span class="math inline">\(D_n\)</span> onto the <span class="math inline">\(\mathbb{R}^d\)</span> space. Each axis of the <span class="math inline">\(\mathbb{R}^d\)</span> space (i.e. <span class="math inline">\(x_1, x_2, ... , x_n\)</span>) corresponds to a dimension of the vector <span class="math inline">\(x\)</span>. The first dimension of <span class="math inline">\(x\)</span> is its first entry, the second dimension is its second entry, and so on. Some of the plotted points are assigned a <span class="math inline">\(y\)</span> value of <span class="math inline">\(+1\)</span> whereas others are assigned to <span class="math inline">\(-1\)</span>.
   </p>
@@ -95,7 +105,7 @@
   <hr>
 
   <!--Perceptron-->
-  <h1 class="text">Perceptron</h1>
+  <h1 class="text" id="6.036Perceptron">Perceptron</h1>
   <pclass="text">Perceptron is a more sophisticated learning algorithm for producing linear classifiers.</p>
   <p>
     Input: \(D_n\), \(T\) <br>
@@ -138,7 +148,7 @@
   <hr>
 
   <!--Polynomial Basis-->
-  <h1 class="text">Polynomial Basis</h1>
+  <h1 class="text" id = "6.036PolynomialBasis">Polynomial Basis</h1>
   <h2 class="text">Reducing Perceptron-Not-Through-Origin to Perceptron-Through-Origin</h2>
   <p class="text">
     As promised earlier, the problem of perceptron-not-through-origin can be reduced to the problem of perceptron-through-origin. The key lies in transforming the dataset used from the \( \mathbb{R}^d \) space to a \( \mathbb{R}^D \) space when \( D > d \).
@@ -193,7 +203,7 @@
   <hr>
 
   <!--Logistic Regression & Gradient Descent-->
-  <h1 class="text">Logistic Regression and Gradient Descent</h1>
+  <h1 class="text" id="6.036LogisticRegression&GradientDescent">Logistic Regression and Gradient Descent</h1>
   <p class="text">Another type of learning algorithm is one based on optimization. In minimizing some function \(J\), called an objective function, the learning algorithm should in effect minimize the training set error on \(D_n\) of the classifier it produces.  </p>
   <p class="text">Objective function \(J\) should be written as \(J(\Theta) = {1\over{n}}{\sum^n_{i=1}}{L(h(x^{(i)}, \Theta),y^{(i)})+\lambda{R(\Theta)}}\). The first addend is the training set error of hypothesis \(h\). The second addend is a new concept. \(R(\Theta)\) is a regularizer. It prevents the learning algorithm from being too honed in on minimizing training set error. Sometimes, learning algorithms that are too focused on minimizing training set error produce a classifier that works too specifically well on training data that it is out of touch with the real-life data it will be thrown in the future. \(\lambda\) is a positive constant (a hyperparameter) that determines to what degree the regularizer will be considered. Also, one must know that \(\Theta\) is used to generally represent all parameters of \(h\). For the scope of logistic regression, \(\Theta\) encompasses \(\theta\) and \(\theta_0\).  </p>
   <p class="text">The type of hypothesis produced in linear regression is different from a standard linear classifier. The hypothesis in linear regression is written as \(h(x; \theta, \theta_0)=\sigma(\theta^Tx+\theta_0)\) when \(\sigma\) is the sigmoid function. The sigmoid function is defined as \(\sigma(z)={{1}\over{1+e^{-z}}}\). Why can't one use a standard linear classifier and the zero-one loss function in the objective function to be optimized? Zero-one loss only says whether or not a separator classifies a point correctly or incorrectly. On the other hand, because \(\sigma(z)\in(0,1)\) and \(\sigma(0)=0.5\), the sigmoid function says how correctly or incorrectly a separator classifies a point. These semantics are what optimization takes advantage of in working towards the optimal set of parameters.</p>
@@ -257,7 +267,7 @@
   <hr>
 
   <!--Regression-->
-  <h1 class="text">Regression</h1>
+  <h1 class="text" id="6.036Regression">Regression</h1>
   <p class="text">
     Like classification, regression is a type of supervised learning setup. Thus, its dataset is still \(D_n = \{(x^{(1)}, y^{(1)}), ... ,(x^{(n)}, y^{(n)})\}\). \(x^{(i)}\in\mathbb{R}^d\), but the set \(y^{(i)}\) belongs to will change: \(y^{(i)}\in\mathbb{R}\). Whereas the \(y\) values in classification were discrete categories, the \(y\) values in regression are continuous values. For example, one might use regression to predict a company's stock price or the temperature in two days. Neither stock price nor temperature should be predicted using categories like \(\{+1, -1\}\); they are continuous values. <br><br>
     The hypothesis for linear regression (finding a trend line) is written as \(h(x; \theta, \theta_0) = \theta^Tx+\theta_0\) when \(\theta\in\mathbb{R}^d\) and \(\theta_0\in\mathbb{R}\). <br><br>
@@ -283,6 +293,11 @@
 
   <!--Neural Networks-->
   <h1 class="text">Neural Networks</h1>
+  <hr>
+
+  <!-- Tensorflow Basics-->
+  <h1 class="text" id="9781617293870TensorflowBasics">Tensorflow Basics</h1>
+  <hr>
 
 
 
